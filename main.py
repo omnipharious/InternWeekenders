@@ -50,9 +50,18 @@ def main():
    # return redirect(url_for('show_posts'))
 
 
+@app.route('/sites')
+def sites():
+    return render_template('sites.html')
+
 @app.route('/home')
 def home():
-	return render_template('index.html')
+    posts = []
+    for account in stormpath_manager.application.accounts:
+        if account.custom_data.get('posts'):
+            posts.extend(account.custom_data['posts'])
+
+	return render_template('index.html', posts = posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
