@@ -1,4 +1,5 @@
 from datetime import datetime
+import math
 
 from flask import (
     Flask,
@@ -50,9 +51,25 @@ def main():
    # return redirect(url_for('show_posts'))
 
 
-@app.route('/sites')
-def sites():
-    return render_template('sites.html')
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/post')
+def post():
+    return render_template('post.html')
+
+@app.route('/sites<int:page>')
+def sites(page):
+    posts = []
+    for account in stormpath_manager.application.accounts:
+        if account.custom_data.get('posts'):
+            posts.extend(account.custom_data['posts'])
+    #calculate the max amount of pages for the amount of posts
+    total_pgs=math.ceil(len(posts)/3.0)
+    #ensures that only 3 posts are shown per page        
+    posts = posts[((page-1)*3):(((page-1)*3)+3)]
+    return render_template('sites.html', posts=posts, page=page, max=total_pgs)
 
 @app.route('/home')
 def home():
@@ -61,7 +78,10 @@ def home():
         if account.custom_data.get('posts'):
             posts.extend(account.custom_data['posts'])
 
-	return render_template('index.html', posts = posts)
+    #ensures that only 3 posts are shown on the homepage        
+    if len(posts) > 3:
+        posts = posts[:3]        
+    return render_template('index.html', posts = posts)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
