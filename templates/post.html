@@ -82,25 +82,45 @@
                         <strong>Experience!</strong>
                     </h2>
                     <hr>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugiat, vitae, distinctio, possimus repudiandae cupiditate ipsum excepturi dicta neque eaque voluptates tempora veniam esse earum sapiente optio deleniti consequuntur eos voluptatem.</p>
-                    <form role="form">
+                    <form action="{{ url_for('submit') }}" method=post role="form">
                         <div class="row">
-                            <div class="form-group col-lg-4">
-                                <label>Location</label>
-                                <input type="text" class="form-control">
+                            <div class="form-group col-lg-12">
+                                <input type="text" name=title class="form-control" placeholder="Where did you go?">
                             </div>
-                            <div class="form-group col-lg-4">
-                                <label>Expense Level</label>
-                                <input type="text" class="form-control">
+                            <div class="form-group col-lg-3">
+                                <input type="text" name=location class="form-control" placeholder="Where is the location?">
                             </div>
-                            <div class="form-group col-lg-4">
-                                <label>Type of Activity</label>
-                                <input type="tel" class="form-control">
+                            <div class="form-group col-lg-3">
+                                <select name=expense class="form-control">
+                                    <option value="" selected>How expensive is it?</option>
+                                    <option value="Free">Free</option>
+                                    <option value="Cheap">Cheap</option>
+                                    <option value="Affordable">Affordable</option>
+                                    <option value="Expensive">Expensive</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <select name=activity class="form-control">
+                                    <option value="" selected>What type of activity is it?</option>
+                                    <option value="Museum">Museum</option>
+                                    <option value="Outdoors">Outdoors</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <select name=crowd class="form-control">
+                                    <option value="" selected>How large are the crowds?</option>
+                                    <option value="Small">Small</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Large">Large</option>
+                                    <option value="Very Large">Very Large</option>
+                                </select>
                             </div>
                             <div class="clearfix"></div>
                             <div class="form-group col-lg-12">
-                                <label>Message</label>
-                                <textarea class="form-control" rows="6"></textarea>
+                                <textarea class="form-control" name=blog rows="6"></textarea>
                             </div>
                             <div class="form-group col-lg-12">
                                 <input type="hidden" name="save" value="contact">
@@ -119,7 +139,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 text-center">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <p>Copyright &copy; InternWeekenders 2015</p>
                 </div>
             </div>
         </div>

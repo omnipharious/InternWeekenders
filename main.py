@@ -55,9 +55,28 @@ def main():
 def contact():
     return render_template('contact.html')
 
+@login_required
 @app.route('/post')
 def post():
     return render_template('post.html')
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    if not user.custom_data.get('posts'):
+        user.custom_data['posts'] = []
+
+    user.custom_data['posts'].append({
+        'date': datetime.utcnow().isoformat(),
+        'title': request.form['title'],
+        'location': request.form['location'],
+        'crowd': request.form['crowd'],
+        'activity': request.form['activity'],
+        'expense': request.form['expense'],
+        'blog': request.form['blog']
+    })
+    user.save()
+
+    return redirect(url_for('sites', page=1))
 
 @app.route('/sites<int:page>')
 def sites(page):
@@ -65,6 +84,7 @@ def sites(page):
     for account in stormpath_manager.application.accounts:
         if account.custom_data.get('posts'):
             posts.extend(account.custom_data['posts'])
+    posts = sorted(posts, key=lambda k: k['date'], reverse=True)
     #calculate the max amount of pages for the amount of posts
     total_pgs=math.ceil(len(posts)/3.0)
     #ensures that only 3 posts are shown per page        
@@ -77,11 +97,11 @@ def home():
     for account in stormpath_manager.application.accounts:
         if account.custom_data.get('posts'):
             posts.extend(account.custom_data['posts'])
-
+    posts = sorted(posts, key=lambda k: k['date'], reverse=True)
     #ensures that only 3 posts are shown on the homepage        
     if len(posts) > 3:
         posts = posts[:3]        
-    return render_template('index.html', posts = posts)
+    return render_template('index.html', posts = posts )
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
