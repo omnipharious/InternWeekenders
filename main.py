@@ -55,11 +55,36 @@ def main():
 def contact():
     return render_template('contact.html')
 
+
 @login_required
 @app.route('/post')
 def post():
 
     return render_template('post.html')
+	
+@login_required	
+@app.route('/read_more<string:post_name>')
+def read_more(post_name):
+	posts = []
+	comments = []
+	post_by_name = 0
+	comments_by_id = []
+	
+	for account in stormpath_manager.application.accounts:
+		if account.custom_data.get('posts'):
+			posts.extend(account.custom_data['posts'])
+	for post in posts:
+		if post['title'] == post_name:
+			post_by_name = post
+	
+	for account in stormpath_manager.application.accounts:
+		if account.custom_data.get('comments'):
+			comments.extend(account.custom_data['comments'])
+	for comment in comments:
+		if comment['comment_id'] == post_by_name['comment_id']:
+			comments_by_id.extend(comment)
+			
+	return render_template('read_more.html', post_name = post_name, post = post_by_name, comments = comments_by_id)
 
 # @login_required
 @app.route('/edit<string:title>')
@@ -88,7 +113,8 @@ def submit():
         'activity': request.form['activity'],
         'expense': request.form['expense'],
         'blog': request.form['blog'],
-        'user_email': str(user)
+        'user_email': str(user),
+		'comment_id': "1234random"
     })
     user.save()
     print(user.custom_data['posts'])
@@ -128,6 +154,33 @@ def update(title):
     user.save()
 
     return redirect(url_for('sites', page=1))
+	
+@app.route('/comment<string:comment_id>', methods=['POST'])
+@login_required
+def comment(comment_id):
+	if not user.custom_data.get('comments'):
+		user.custom_data['comments'] = []
+		
+	comment = {
+		'date': datetime.utcnow().isoformat(),
+		'title': request.form['title'],
+		'comment_text': request.form['comment'],
+		'comment_id': comment_id
+	}
+	
+	user.custom_data['comments'].append(comment)
+	user.save()
+	'''
+	posts = []
+	post_by_name = 0
+	for account in stormpath_manager.application.accounts:
+		if account.custom_data.get('posts'):
+			posts.extend(account.custom_data['posts'])
+	for post in posts:
+		if post['comment_id'] == comment_id:
+			post_by_id = post
+	'''		
+	return redirect(url_for('sites', page = 1))
 
 @app.route('/delete<string:title>')
 def delete(title):

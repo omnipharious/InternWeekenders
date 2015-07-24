@@ -114,7 +114,7 @@
                     <img class="img-responsive img-border img-full" src="static/img/slide-{{loop.index0%3+1}}.jpg" alt="">
                     <br>
                     <p>{{post['blog']}}</p>
-                    <a href="#" class="btn btn-default btn-lg">Read More</a>
+                    <a href="{{url_for('read_more', post_name = post['title'])}}" class="btn btn-default btn-lg">Read More</a>
                     <hr>
                 </div>
                 {%endfor%}
