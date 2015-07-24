@@ -107,7 +107,7 @@
                         <small>{{post.location}}     <expense style="color:{{color}}">$</expense>     {{post.crowd}}</small><br>
                         <small>October {{post['date'][8:10]}}, {{post['date'][0:4]}}</small>
                     </h2>
-                    {% if post.user_email == user %}
+                    {% if post.user_email == user1 %}
                     <a href="{{ url_for('edit',title=post.title) }}" class="btn btn-default btn-lg">Edit</a>
 
                     <a href="{{ url_for('delete', title=post.title) }}" class="btn btn-default btn-lg">Delete</a>

@@ -61,7 +61,7 @@ def post():
 
     return render_template('post.html')
 
-@login_required
+# @login_required
 @app.route('/edit<string:title>')
 def edit(title):
     posts = []
@@ -107,8 +107,6 @@ def update(title):
     posts = sorted(posts, key=lambda k: k['date'], reverse=True)
 
     del user.custom_data['posts'][:]
-    print("USER*****")
-    print(user)
 
     for post in user.custom_data['posts']:
         i = 0
@@ -156,6 +154,7 @@ def delete(title):
 
     return redirect(url_for('sites', page=1))
 
+@login_required
 @app.route('/sites<int:page>')
 def sites(page):
     posts = []
@@ -167,7 +166,7 @@ def sites(page):
     total_pgs=math.ceil(len(posts)/3.0)
     #ensures that only 3 posts are shown per page        
     posts = posts[((page-1)*3):(((page-1)*3)+3)]
-    return render_template('sites.html', posts=posts, page=page, max=total_pgs, user=str(user))
+    return render_template('sites.html', posts=posts, page=page, max=total_pgs, user1=str(user))
 
 @app.route('/home')
 def home():
