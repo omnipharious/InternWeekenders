@@ -77,74 +77,18 @@
         <div class="row">
             <div class="box">
                 <div class="col-lg-12">
-                    <hr>
-                    <h2 class="intro-text text-center">Share your
-                        <strong>Experience!</strong>
+                    <!--<hr>-->
+                    <h2 class="intro-text text-center" style="color:red">
+                        <strong> {{title}} Deleted </strong>
                     </h2>
-                    <hr>
-                    <form action="{{ url_for('update',title=post.title) }}" method=post role="form">
-                        <div class="row">
-                            <div class="form-group col-lg-12">
-                                <input type="text" name=title class="form-control" value="{{post.title}}" >
-                            </div>
-                            <div class="form-group col-lg-3">
-                                <input type="text" name=location class="form-control" value="{{post.location}}">
-                            </div>
-                            <div class="form-group col-lg-3">
-                                <select name=expense class="form-control">
-                                    <option value="" selected>Cheap</option>
-                                    <option value="Free">Free</option>
-                                    <option value="Cheap">Cheap</option>
-                                    <option value="Affordable">Affordable</option>
-                                    <option value="Expensive">Expensive</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-lg-3">
-                                <select name=activity class="form-control">
-                                    <option value="" selected>{{post.activity}}</option>
-                                    <option value="Museum">Museum</option>
-                                    <option value="Outdoors">Outdoors</option>
-                                    <option value="Food">Food</option>
-                                    <option value="Sports">Sports</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-lg-3">
-                                <select name=crowd class="form-control">
-                                    <option value="" selected>{{post.crowd}}</option>
-                                    <option value="Small">Small</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Large">Large</option>
-                                    <option value="Very Large">Very Large</option>
-                                </select>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="form-group col-lg-12">
+                    <!--<hr>-->
 
-                                <textarea class="form-control" name=blog rows="6">{{post.blog}}</textarea>
-                            </div>
-                            <div class="form-group col-lg-12">
-                                <input type="hidden" name="save" value="contact">
-                                <button type="update" class="btn btn-default" style="color:brown">Update</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
 
     </div>
     <!-- /.container -->
-
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <p>Copyright &copy; InternWeekenders 2015</p>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- jQuery -->
     <script src="static/js/jquery.js"></script>

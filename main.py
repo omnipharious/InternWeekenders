@@ -121,14 +121,15 @@ def update(title):
         'crowd': request.form['crowd'],
         'activity': request.form['activity'],
         'expense': request.form['expense'],
-        'blog': request.form['blog']
+        'blog': request.form['blog'],
+        'user_email': str(user)
     })
     #print(user.custom_data['posts'])
     user.save()
 
     return redirect(url_for('sites', page=1))
 
-@app.route('/update<string:title>', methods=['POST'])
+@app.route('/delete<string:title>')
 def delete(title):
     if not user.custom_data.get('posts'):
         user.custom_data['posts'] = []
@@ -139,9 +140,8 @@ def delete(title):
             posts.extend(account.custom_data['posts'])
     posts = sorted(posts, key=lambda k: k['date'], reverse=True)
 
+    print(user.custom_data['posts'])
     del user.custom_data['posts'][:]
-    print("USER*****")
-    print(user)
 
     for post in user.custom_data['posts']:
         i = 0
@@ -149,10 +149,32 @@ def delete(title):
             print(user.custom_data['posts'])
             del user.custom_data['posts'][i]
 
-    print(user.custom_data['posts'])
     user.save()
 
-    return redirect(url_for('sites', page=1))
+    return render_template('delete.html', title=title)
+
+    # if not user.custom_data.get('posts'):
+    #     user.custom_data['posts'] = []
+    #
+    # posts = []
+    # for account in stormpath_manager.application.accounts:
+    #     if account.custom_data.get('posts'):
+    #         posts.extend(account.custom_data['posts'])
+    # posts = sorted(posts, key=lambda k: k['date'], reverse=True)
+    #
+    # print(user.custom_data['posts'])
+    # del user.custom_data['posts'][:]
+    #
+    # for post in user.custom_data['posts']:
+    #     i = 0
+    #     if post['title'] == title and post['user_email'] == user:
+    #         print(user.custom_data['posts'])
+    #         del user.custom_data['posts'][i]
+    #
+    # print(user.custom_data['posts'])
+    # user.save()
+    #
+    # return redirect(url_for('sites', page=1))
 
 @login_required
 @app.route('/sites<int:page>')
