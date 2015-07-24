@@ -58,7 +58,22 @@ def contact():
 @login_required
 @app.route('/post')
 def post():
+
     return render_template('post.html')
+
+@login_required
+@app.route('/edit<string:title>')
+def edit(title):
+    posts = []
+    for account in stormpath_manager.application.accounts:
+        if account.custom_data.get('posts'):
+            posts.extend(account.custom_data['posts'])
+    posts = sorted(posts, key=lambda k: k['date'], reverse=True)
+    for post in posts:
+        if post['title'] == title:
+            new_post = post
+
+    return render_template('edit.html',post=new_post)
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -72,8 +87,71 @@ def submit():
         'crowd': request.form['crowd'],
         'activity': request.form['activity'],
         'expense': request.form['expense'],
+        'blog': request.form['blog'],
+        'user_email': str(user)
+    })
+    user.save()
+    print(user.custom_data['posts'])
+
+    return redirect(url_for('sites', page=1,user=str(user)))
+
+@app.route('/update<string:title>', methods=['POST'])
+def update(title):
+    if not user.custom_data.get('posts'):
+        user.custom_data['posts'] = []
+
+    posts = []
+    for account in stormpath_manager.application.accounts:
+        if account.custom_data.get('posts'):
+            posts.extend(account.custom_data['posts'])
+    posts = sorted(posts, key=lambda k: k['date'], reverse=True)
+
+    del user.custom_data['posts'][:]
+    print("USER*****")
+    print(user)
+
+    for post in user.custom_data['posts']:
+        i = 0
+        if post['title'] == title and post['user_email'] == user:
+            print(user.custom_data['posts'])
+            del user.custom_data['posts'][i]
+
+    user.custom_data['posts'].append({
+        'date': datetime.utcnow().isoformat(),
+        'title': request.form['title'],
+        'location': request.form['location'],
+        'crowd': request.form['crowd'],
+        'activity': request.form['activity'],
+        'expense': request.form['expense'],
         'blog': request.form['blog']
     })
+    #print(user.custom_data['posts'])
+    user.save()
+
+    return redirect(url_for('sites', page=1))
+
+@app.route('/update<string:title>', methods=['POST'])
+def delete(title):
+    if not user.custom_data.get('posts'):
+        user.custom_data['posts'] = []
+
+    posts = []
+    for account in stormpath_manager.application.accounts:
+        if account.custom_data.get('posts'):
+            posts.extend(account.custom_data['posts'])
+    posts = sorted(posts, key=lambda k: k['date'], reverse=True)
+
+    del user.custom_data['posts'][:]
+    print("USER*****")
+    print(user)
+
+    for post in user.custom_data['posts']:
+        i = 0
+        if post['title'] == title and post['user_email'] == user:
+            print(user.custom_data['posts'])
+            del user.custom_data['posts'][i]
+
+    print(user.custom_data['posts'])
     user.save()
 
     return redirect(url_for('sites', page=1))
@@ -89,7 +167,7 @@ def sites(page):
     total_pgs=math.ceil(len(posts)/3.0)
     #ensures that only 3 posts are shown per page        
     posts = posts[((page-1)*3):(((page-1)*3)+3)]
-    return render_template('sites.html', posts=posts, page=page, max=total_pgs)
+    return render_template('sites.html', posts=posts, page=page, max=total_pgs, user=str(user))
 
 @app.route('/home')
 def home():

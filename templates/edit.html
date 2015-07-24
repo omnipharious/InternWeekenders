@@ -32,7 +32,7 @@
 
 <body>
 
-    <div class="brand">Intern Weekenders</div>
+    <div class="brand">Intern Weekenders </div>
 
     <!-- Navigation -->
     <nav class="navbar navbar-default" role="navigation">
@@ -55,7 +55,7 @@
                         <a href="{{ url_for('home') }}">Home</a>
                     </li>
                     <li>
-                        <a style="color:black">Sites</a>
+                        <a href="{{ url_for('sites', page=1) }}">Sites</a>
                     </li>
                     <li>
                         <a href="{{ url_for('contact') }}">Contact</a>
@@ -74,62 +74,61 @@
         <!-- /.container -->
     </nav>
 
-    <div class="container">
-
         <div class="row">
             <div class="box">
                 <div class="col-lg-12">
                     <hr>
-                    <h2 class="intro-text text-center">Sites around
-                        <strong>Cisco</strong>
+                    <h2 class="intro-text text-center">Share your
+                        <strong>Experience!</strong>
                     </h2>
                     <hr>
+                    <form action="{{ url_for('update',title=post.title) }}" method=post role="form">
+                        <div class="row">
+                            <div class="form-group col-lg-12">
+                                <input type="text" name=title class="form-control" value="{{post.title}}" >
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <input type="text" name=location class="form-control" value="{{post.location}}">
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <select name=expense class="form-control">
+                                    <option value="" selected>Cheap</option>
+                                    <option value="Free">Free</option>
+                                    <option value="Cheap">Cheap</option>
+                                    <option value="Affordable">Affordable</option>
+                                    <option value="Expensive">Expensive</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <select name=activity class="form-control">
+                                    <option value="" selected>{{post.activity}}</option>
+                                    <option value="Museum">Museum</option>
+                                    <option value="Outdoors">Outdoors</option>
+                                    <option value="Food">Food</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <select name=crowd class="form-control">
+                                    <option value="" selected>{{post.crowd}}</option>
+                                    <option value="Small">Small</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Large">Large</option>
+                                    <option value="Very Large">Very Large</option>
+                                </select>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group col-lg-12">
 
-                {% if user.email %}
-                <div class="col-lg-12 text-center">
-                    <a href="{{url_for('post')}}" class="btn btn-default btn-lg" style="color:brown">Post</a>
-                    <hr>
-                </div>
-                {% endif %}
-                {% for post in posts %}
-                <div class="col-lg-12 text-center">
-                {% if post.expense == 'Free' %}
-                {% set color="deepskyblue" %}
-                {% elif post.expense == 'Cheap' %}
-                {% set color="green" %}
-                {% elif post.expense == 'Affordable' %}
-                {% set color="#E2DC00" %}
-                {% elif post.expense == 'Expensive' %}
-                {% set color="red" %}
-                {% endif %}    
-                    <h2>{{post['title']}}
-                        <br>
-                        <small>{{post.location}}     <expense style="color:{{color}}">$</expense>     {{post.crowd}}</small><br>
-                        <small>October {{post['date'][8:10]}}, {{post['date'][0:4]}}</small>
-                    </h2>
-                    {% if post.user_email == user %}
-                    <a href="{{ url_for('edit',title=post.title) }}" class="btn btn-default btn-lg">Edit</a>
-
-                    <a href="{{ url_for('delete', title=post.title) }}" class="btn btn-default btn-lg">Delete</a>
-                    {% endif %}
-                    <img class="img-responsive img-border img-full" src="static/img/slide-{{loop.index0%3+1}}.jpg" alt="">
-                    <br>
-                    <p>{{post['blog']}}</p>
-                    <a href="#" class="btn btn-default btn-lg">Read More</a>
-                    <hr>
-                </div>
-                {%endfor%}
-                <div class="col-lg-12 text-center">
-                    <ul class="pager">
-                        {% if page != 1 %}
-                        <li class="previous"><a href="{{url_for('sites', page=page-1)}}">&larr; Newer</a>
-                        </li>
-                        {% endif %}
-                        {% if page != max %}
-                        <li class="next"><a href="{{url_for('sites', page=page+1)}}">Older &rarr;</a>
-                        </li>
-                        {% endif %}
-                    </ul>
+                                <textarea class="form-control" name=blog rows="6">{{post.blog}}</textarea>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <input type="hidden" name="save" value="contact">
+                                <button type="update" class="btn btn-default" style="color:brown">Update</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -149,6 +148,10 @@
 
     <!-- jQuery -->
     <script src="static/js/jquery.js"></script>
+    <script type="text/javascript">
+        console.log(user)
+    </script>
+
 
     <!-- Bootstrap Core JavaScript -->
     <script src="static/js/bootstrap.min.js"></script>
