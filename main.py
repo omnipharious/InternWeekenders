@@ -80,10 +80,17 @@ def read_more(post_name):
 	for account in stormpath_manager.application.accounts:
 		if account.custom_data.get('comments'):
 			comments.extend(account.custom_data['comments'])
-	for comment in comments:
-		if comment['comment_id'] == post_by_name['comment_id']:
-			comments_by_id.extend(comment)
 			
+	print comments
+	
+	for comment in comments:
+		print comment['comment_id']
+		print post_by_name['comment_id']
+		if comment['comment_id'] == post_by_name['comment_id']:
+			print comment
+			comments_by_id.append(comment)
+			
+	print comments_by_id		
 	return render_template('read_more.html', post_name = post_name, post = post_by_name, comments = comments_by_id)
 
 # @login_required
