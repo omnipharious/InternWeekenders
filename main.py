@@ -140,13 +140,11 @@ def update(title):
             posts.extend(account.custom_data['posts'])
     posts = sorted(posts, key=lambda k: k['date'], reverse=True)
 
-    del user.custom_data['posts'][:]
 
     for post in user.custom_data['posts']:
-        i = 0
-        if post['title'] == title and post['user_email'] == user:
+        if post['title'] == title and str(post['user_email']) == str(user):
+            user.custom_data['posts'].remove(post)
             print(user.custom_data['posts'])
-            del user.custom_data['posts'][i]
 
     user.custom_data['posts'].append({
         'date': datetime.utcnow().isoformat(),
@@ -229,14 +227,9 @@ def delete(title):
             posts.extend(account.custom_data['posts'])
     posts = sorted(posts, key=lambda k: k['date'], reverse=True)
 
-    print(user.custom_data['posts'])
-    del user.custom_data['posts'][:]
-
     for post in user.custom_data['posts']:
-        i = 0
-        if post['title'] == title and post['user_email'] == user:
-            print(user.custom_data['posts'])
-            del user.custom_data['posts'][i]
+        if post['title'] == title and str(post['user_email']) == str(user):
+             user.custom_data['posts'].remove(post)
 
     user.save()
 
