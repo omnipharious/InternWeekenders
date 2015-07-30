@@ -121,7 +121,7 @@ def submit():
         'expense': request.form['expense'],
         'blog': request.form['blog'],
         'user_email': str(user),
-		'comment_id': "1234random"
+		'comment_id': "1234random",
         'vote': 0
     })
     user.save()
@@ -154,7 +154,7 @@ def update(title):
         'activity': request.form['activity'],
         'expense': request.form['expense'],
         'blog': request.form['blog'],
-        'user_email': str(user)
+        'user_email': str(user),
         'vote': 0
         
     })
