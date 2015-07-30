@@ -6,4 +6,4 @@ Download apikey.properties from:
 
 https://www.dropbox.com/s/y2kz5krwmnkto93/apiKey.properties?dl=0
 
-and place in parent folder 
+and place in parent folder. 
