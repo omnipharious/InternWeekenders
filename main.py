@@ -122,6 +122,7 @@ def submit():
         'blog': request.form['blog'],
         'user_email': str(user),
 		'comment_id': "1234random"
+        'vote': 0
     })
     user.save()
     print(user.custom_data['posts'])
@@ -156,6 +157,8 @@ def update(title):
         'expense': request.form['expense'],
         'blog': request.form['blog'],
         'user_email': str(user)
+        'vote': 0
+        
     })
     #print(user.custom_data['posts'])
     user.save()
@@ -188,6 +191,32 @@ def comment(comment_id):
 			post_by_id = post
 	'''		
 	return redirect(url_for('sites', page = 1))
+
+
+
+@app.route('/votes<string:title>', methods = ['POST'])
+def votes(title):
+    if not user.custom_data.get('posts'):
+        user.custom_data['posts'] = []
+
+    posts = []
+    for account in stormpath_manager.application.accounts:
+        if account.custom_data.get('posts'):
+            posts.extend(account.custom_data['posts'])
+    posts = sorted(posts, key=lambda k: k['date'], reverse=True)
+
+    for post in user.custom_data['posts']:
+        i = 0
+        print(post['title'])
+        print(title)
+        if post['title'] == title:
+            print("inside")
+            post['vote'] += 1
+            new_post = post
+            print(new_post)
+
+    return redirect(url_for('sites', page=1, new_post=new_post))
+    # return render_template(url_for('post.html'))
 
 @app.route('/delete<string:title>')
 def delete(title):
