@@ -101,11 +101,38 @@
                 {% set color="#E2DC00" %}
                 {% elif post.expense == 'Expensive' %}
                 {% set color="red" %}
-                {% endif %}    
+                {% endif %}  
+                {% if post.crowd == 'Small'%}
+                {% set number="1" %}
+                {% elif post.crowd == 'Medium'%}
+                {% set number="2" %}
+                {% elif post.crowd =='Large' %}
+                {% set number="3" %}
+                {% elif post.crowd =='Very Large' %}
+                {% set number="4" %}
+                {% endif %}  
                     <h2>{{post['title']}}
                         <br>
-                        <small>{{post.location}}     <expense style="color:{{color}}">$</expense>     {{post.crowd}}</small><br>
-                        <small>October {{post['date'][8:10]}}, {{post['date'][0:4]}}</small>
+                        <small>{{post.location}}     <expense style="color:{{color}}">$</expense>
+                            {% if number == '1'%}
+                             <img src="static/img/person{{1}}.png" width="15" height="30">
+                             {% elif number == '2'%}
+                             <img src="static/img/person{{1}}.png" width="15" height="30"><img src="static/img/person{{1}}.png" width="15" height="30">
+                             {% elif number =='3' %}
+                             <img src="static/img/person{{1}}.png" width="15" height="30"><img src="static/img/person{{1}}.png" width="15" height="30"><img src="static/img/person{{1}}.png" width="15" height="30">
+                             {% elif number =='4' %}
+                             <img src="static/img/person{{1}}.png" width="15" height="30"><img src="static/img/person{{1}}.png" width="15" height="30"><img src="static/img/person{{1}}.png" width="15" height="30"><img src="static/img/person{{1}}.png" width="15" height="30">
+                             {% endif %}
+                        </small><br>
+                        <small> July {{post['date'][8:10]}}, {{post['date'][0:4]}}</small>
+                        <form action="{{ url_for('votes',title=post.title) }}" method=post role="form">
+                            <input type="image" src="static/img/thumbup.png" width="30">
+                            <small>{{post.vote}}</small>
+                        </form>
+
+                            <!--<a href="{{ url_for('votes',title=post.title) }}" method=post><img src="static/img/thumbup.png", width="30">{{post.vote}}</a><br>-->
+
+                        <small>Posted By: {{post['user_email']}}</small> 
                     </h2>
                     {% if post.user_email == user1 %}
                     <a href="{{ url_for('edit',title=post.title) }}" class="btn btn-default btn-lg">Edit</a>
